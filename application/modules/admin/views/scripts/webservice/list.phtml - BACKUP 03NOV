@@ -1,0 +1,165 @@
+<?php $creationDate = new Zend_Date(); ?>
+<style type="text/css"> @IMPORT url("/css/jquery/osx.css");</style>
+<style type="text/css"> @IMPORT url("/css/jquery/jquery.loadmask.css");</style>
+<script type="text/javascript" src="/js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.14.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.simplemodal.js"></script>
+<script type="text/javascript" src="/js/jquery.json-2.2.min.js"></script>
+<script type="text/javascript" src="/js/jquery.loadmask.min.js"></script>
+<script type="text/javascript" src="/js/md5.js"></script>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$('.flashMessageValid').delay(2000).fadeOut(2000);
+	$('a.toggleWebservice').click(function(event) {
+		event.preventDefault();
+                
+		var anchor = $(this);
+		
+		var cells = anchor.parent().siblings();
+		var ids = jQuery.trim($(cells[0]).text());
+		var sharp = ids.lastIndexOf('#');
+
+		var todo = (anchor.attr("class") == 'toggleWebservice iconLink deactivate') ? 'off' : 'on';
+                
+                if( ! confirm('Êtes-vous sûr(e) de vouloir ' + (todo=='off'?'arrêter':'démarrer') + ' ce webservice?'))
+                {
+                    return;
+                }
+                
+		$("body").mask("Patientez...");
+		$.post('/admin/async/setwebservice', {cid:ids.substring(0, sharp), pid:ids.substring(sharp + 1, ids.length), action:todo}, function(data) {
+			var obj = $.evalJSON(data);
+			if (obj['message'] == "ok") {
+				$("body").unmask();
+				if (todo == "on") {
+					anchor.removeClass("activate").addClass("deactivate");
+				} else {
+					anchor.removeClass("deactivate").addClass("activate");
+				}
+			}
+		});
+	});
+	var OSX = {
+			container: null,
+			init: function () {
+				$("input.osx, a.osx").click(function (e) {
+					e.preventDefault();	
+                    var cid = $(this).attr('data-cid');
+                    var pid = $(this).attr('data-pid');
+					$("#span-url").text('<?= $this->serverUrl() . $this->link('coreg', 'index', 'default'); ?>/?cid=' + cid + '&pid=' + pid);
+					$("#span-passkey").text(MD5(cid + '&' + pid));
+					$("#osx-modal-content").modal({
+						overlayId: 'osx-overlay',
+						containerId: 'osx-container',
+						closeHTML: null,
+						minHeight: 80,
+						opacity: 65, 
+						position: ['0',],
+						overlayClose: true,
+						onOpen: OSX.open,
+						onClose: OSX.close
+					});
+				});
+			},
+			open: function (d) {
+				var self = this;
+				self.container = d.container[0];
+				d.overlay.fadeIn('slow', function () {
+					$("#osx-modal-content", self.container).show();
+					var title = $("#osx-modal-title", self.container);
+					title.show();
+					d.container.slideDown('slow', function () {
+						setTimeout(function () {
+							var h = $("#osx-modal-data", self.container).height()
+								+ title.height()
+								+ 20; // padding
+							d.container.animate(
+								{height: h}, 
+								200,
+								function () {
+									$("div.close", self.container).show();
+									$("#osx-modal-data", self.container).show();
+								}
+							);
+						}, 300);
+					});
+				})
+			},
+			close: function (d) {
+				var self = this; // this = SimpleModal object
+				d.container.animate(
+					{top:"-" + (d.container.height() + 20)},
+					500,
+					function () {
+						self.close(); // or $.modal.close();
+					}
+				);
+			}
+		};
+
+		OSX.init();
+});
+//-->
+</script>
+<h1><?= $this->pageTitle; ?></h1>
+<?php if( ! isset($this->noEdit)):?>
+    <nav style="background-color: #f3f3f3; padding: 10px; margin-bottom: 15px; position: relative;">
+        <a href="<?= $this->link('webservice', 'new', 'admin'); ?>">Créer un webservice</a>
+        <?php 
+            if ($this->filter == true) {
+                echo "<a href=\"" . $this->link('webservice', 'list', 'admin') . "\" style=\"position:absolute; right: 10px\">Voir les webservices actifs</a>";
+            } else {
+                echo "<a href=\"" . $this->link('webservice', 'list', 'admin', array('filter' => 'archived')) . "\" style=\"position:absolute; right: 10px\">Voir les webservices archiv&eacute;s</a>";
+            }
+        ?>
+    </nav>
+<?php endif;?>
+<?php if (isset($this->message)):?>
+<section class="flashMessageValid">
+	<?= $this->message; ?>
+</section>
+<?php endif;?>
+<a href="<?=$this->url(array('sortBy'=>$this->sortBy=='publisher_id' ? 'campaign':'publisher', 'c'=>isset($this->campaign)?$this->campaign->id:null))?>">Trier par <?=($this->sortBy=='publisher_id' ? 'Campagne':'Editeur')?></a>
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="60" scope="col" class="toto">ID</th>
+	  	<th width="200" scope="col">Editeur</th>
+	  	<th width="200" scope="col">Campagne</th>
+	  	<th width="100" scope="col">Volume</th>
+	  	<th width="80" scope="col">Tarif</th>
+	  	<th width="100" scope="col">Créé le</th>
+	  	<th width="120" scope="col">Actions</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->campaignPublishers as $campaignPublisher): ?>
+			<?php $creationDate->set($campaignPublisher->creation_date, 'YYYY-MM-DD', 'fr_FR'); ?>
+			<tr>
+				<td><?= $campaignPublisher->campaign_id . '#' . $campaignPublisher->publisher_id; ?>
+				<td><?= $campaignPublisher->findParentTable_Publisher()->Nom_Base; ?></td>
+				<td><?= $campaignPublisher->findParentTable_Campaign()->name; ?></td>
+				<td><?= number_format($campaignPublisher->volume, 0, '', ' '); ?></td>
+				<td><?= $campaignPublisher->price; ?>€</td>
+				<td><?= $creationDate->toString('dd/MM/y'); ?></td>
+				<td>
+					<a href="#" class='osx' title="Voir" data-cid="<?=$campaignPublisher->campaign_id?>" data-pid="<?=$campaignPublisher->publisher_id?>"><img src="/images/magnifier.png" width="16" height="16" /></a>
+					<?php if( ! isset($this->noEdit)): ?><a href="<?= $this->link('webservice', 'edit', 'admin', array('c' => $campaignPublisher->campaign_id, 'p' => $campaignPublisher->publisher_id)); ?>" title="Modifier"><img src="/images/pencil.png" width="16" height="16" /></a><?php endif;?>
+					<a href="#" title="<?= ($campaignPublisher->status == 1) ? 'Arrêter':'Démarrer';  ?>" class="toggleWebservice iconLink <?= ($campaignPublisher->status == 1) ? 'deactivate' : 'activate';  ?>"></a>
+				</td>
+			</tr>
+		<?php endforeach;?>
+	</tbody>
+</table>
+<div id="osx-modal-content">
+	<div id="osx-modal-title">Informations sur le webservice</div>
+	<div class="close"><a href="#" class="simplemodal-close">x</a></div>
+
+	<div id="osx-modal-data">
+		<p>URL du webservice : <span id="span-url"><i>url</i></span></p>
+		<p>Passkey : <span id="span-passkey"><i>passkey</i></span></p>
+		<p><button class="simplemodal-close">Fermer</button> <span>(ou appuyez sur ESC ou cliquez ailleurs)</span></p>
+
+	</div>
+</div>

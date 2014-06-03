@@ -1,0 +1,79 @@
+<center>
+<table cellpadding="0" cellspacing="2" border="0"
+	style="border: 2px solid #cccccc; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:18px;">
+	<tr>
+		<td><img src="http://tracking.collecting.fr/images/bandeau.jpg" height="120" width="600" border="0" alt="" /></td>
+	</tr>
+	<tr>
+		<td align="center"><br />
+		Bonjour <?= $this->editor; ?>, <br />
+		<b>Voici les informations du webservice concernant la campagne</b><br /><br />
+		<b><?= $this->campaign->name; ?></b><br />
+		<br />
+		<table cellpadding="5" cellspacing="2" border="0">
+			<tr bgcolor="#f3f3f3">
+				<td width="100" bgcolor="#f3f3f3">Volume</td>
+				<td width="300"><?= number_format($this->webservice->volume, 0, '', ' '); ?></td>
+			</tr>
+			<tr bgcolor="#f3f3f3">
+				<td>Rémunération</td>
+				<td><?= $this->webservice->price; ?>€</td>
+			</tr>
+			<tr bgcolor="#f3f3f3">
+				<td>URL</td>
+				<td><?= $this->webservice->webservice_url; ?></td>
+			</tr>
+			<tr>
+				<td colspan="2">Ces champs de formulaire sont à envoyer en POST à l'adresse suivante<br />
+					http://tracking.collecting.fr/coreg/?cid=<?= $this->webservice->campaign_id; ?>&pid=<?= $this->webservice->publisher_id; ?>
+				</td>
+			</tr>
+		</table>
+		<br />
+		<table cellpadding="5" cellspacing="2" border="0">
+			<tr>
+				<td colspan="2"><b>Identifiants des champs :</b></td>
+			</tr>
+			<?php foreach ($this->fields as $campaignfield):?>
+			<tr bgcolor="#f3f3f3">
+				<td width="100"><?= $campaignfield->findParentTable_Field()->alias; ?></td>
+				<td width="300"><?= $campaignfield->findParentTable_Field()->name; ?></td>
+			</tr>
+			<?php endforeach;?>
+		</table>
+		<br />
+		<table cellpadding="5" cellspacing="2" border="0">
+			<tr>
+				<td colspan="2"><b>Paramètres de retour :</b></td>
+			</tr>
+			<tr bgcolor="#f3f3f3">
+				<td width="100">OK</td>
+				<td width="300">si tout est bon</td>
+			</tr>
+			<tr bgcolor="#f3f3f3">
+				<td>ERROR</td>
+				<td>s'il y a un problème</td>
+			</tr>
+			<tr bgcolor="#f3f3f3">
+				<td>DUPLICATE</td>
+				<td>en cas de doublon</td>
+			</tr>
+		</table>
+		<br />
+		<b>Vous <u>devez adjoindre</u> aux formulaires envoyés le champ "<span style="color: red">passkey</span>" suivant :</b>
+		<br />
+		<b style="color: red"><?= $this->passkey; ?></b><br />
+		<br />
+		<b>Votre contact : <?= $this->campaign->findParentTable_User()->firstname . ' ' . $this->campaign->findParentTable_User()->lastname; ?></b> <br />
+		<br />
+		<i>Merci.</i> <br />
+		<br />
+		</td>
+	</tr>
+	<tr>
+		<td bgcolor="#e91b86" align="center" height="40"><a
+			href="http://www.baseandco.com/"
+			style="color: #ffffff; text-decoration: underline">www.baseandco.com</a></td>
+	</tr>
+</table>
+</center>

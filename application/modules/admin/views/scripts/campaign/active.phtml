@@ -1,0 +1,4 @@
+<h3>Etes-vous certain de vouloir activer la campagne <?= $this->campaign->name; ?> ?</h3>
+<br />
+<input type="button" value="Activer" onclick="location.replace('<?= $this->link('campaign', 'active', 'admin', array('c' => $this->campaign->id, 'confirm' => 'do')); ?>')" />
+<input type="button" value="Annuler" onclick="location.replace('/admin/campaign/list')" />

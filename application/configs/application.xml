@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:zf="http://framework.zend.com/xml/zend-config-xml/1.0/">
+	<application>
+		<includePaths>
+			<library><zf:const zf:name="APPLICATION_PATH" />/../library</library>
+		</includePaths>
+		<pluginPaths>
+			<BC_Application_Resource value="BC/Application/Resource" />
+		</pluginPaths>
+		<autoloaderNamespaces>
+			<JPGraph value="JPGraph_" />
+		</autoloaderNamespaces>
+		<phpsettings>
+			<!--<error_reporting value="8191" />-->
+			<date>
+				<timezone value="Europe/Paris" />
+			</date>
+		</phpsettings>
+		<bootstrap>
+			<path><zf:const zf:name="APPLICATION_PATH" />/Bootstrap.php</path>
+			<class value="Bootstrap" />
+		</bootstrap>
+		<resources>
+  			<log>
+  				<stream>
+  					<writerName value="Stream" />
+  					<writerParams>
+  						<stream><zf:const zf:name="APPLICATION_PATH"/>/../data/logs/application.log</stream>
+  						<mode value="a" />
+					</writerParams>
+  					<filterName value="Priority" />
+  					<filterParams>
+  						<priority value="3" />
+  					</filterParams>
+				</stream>
+  			</log>
+			<frontController>
+				<moduleDirectory><zf:const zf:name="APPLICATION_PATH" />/modules/</moduleDirectory>
+				<defaultModule value="default" />
+				<moduleControllerDirectoryName value="controllers" />
+				<defaultControllerName value="index" />
+			</frontController>
+			<layout>
+				<layout value="layout" />
+				<layoutPath><zf:const zf:name="APPLICATION_PATH" />/modules/layouts</layoutPath>
+			</layout>
+			<view>
+				<pathCss value="/public/css/" />
+				<pathImg value="/public/images/" />
+				<pathJs value="/public/js/" />
+				<doctype value="HTML5" />
+				<encoding value="UTF-8" />
+			</view>
+			<session>
+				<use_cookies value="1" />
+				<use_only_cookies value="1" />
+				<use_trans_sid value="0" />
+				<strict value="0" />
+				<name value="bc" />
+				<save_path><zf:const zf:name="APPLICATION_PATH" />/../data/sessions</save_path>
+			</session>
+			<router>
+				<routes>
+					<unauthorized type="Zend_Controller_Router_Route_Static">
+						<route>unauthorized</route>
+						<defaults module="default" controller="error" action="unauthorized" />
+					</unauthorized>
+					<login type="Zend_Controller_Router_Route_Static">
+						<route>login</route>
+						<defaults module="admin" controller="login" action="index" />
+					</login>
+					<logout type="Zend_Controller_Router_Route_Static">
+						<route>logout</route>
+						<defaults module="admin" controller="login" action="logout" />
+					</logout>
+					<setup type="Zend_Controller_Router_Route_Static">
+						<route>setup</route>
+						<defaults module="admin" controller="index" action="setup" />
+					</setup>
+				</routes>
+			</router>
+			<acl></acl>
+		</resources>
+	</application>
+
+	<development extends="application">
+		<export_folder value="/Applications/MAMP/htdocs/coregistration/public/statexport/" />
+		<phpsettings>
+			<display_startup_errors value="1" />
+			<display_errors value="1" />
+		</phpsettings>
+		<resources>
+			<frontController>
+				<params>
+					<displayExceptions value="1" />
+				</params>
+			</frontController>
+			<session>
+				<remember_me_seconds value="0" />
+				<gc_divisor value="10" />
+				<gc_maxlifetime value="86400" />
+				<gc_probability value="1" />
+			</session>
+			<db>
+				<baseandco>
+					<adapter value="PDO_MYSQL" />
+					<config>
+						<host value="localhost" />
+						<port value="3306" />
+						<username value="root" />
+						<password value="root" />
+						<dbname value="baseandco" />
+						<default value="false" />
+					</config>
+				</baseandco>
+				<coregistration>
+					<adapter value="PDO_MYSQL" />
+					<config>
+						<host value="localhost" />
+						<port value="3306" />
+						<username value="root" />
+						<password value="root" />
+						<dbname value="coregistration" />
+						<date_format value="YYYY-MM-ddTHH:mm:ss" />
+						<default value="true" />
+					</config>
+				</coregistration>
+			</db>
+			<mail>
+				<transport>
+					<type value="smtp" />
+					<host value="smtp.gmail.com" />
+					<auth value="login" />
+					<username value="user@gmail.com" />
+					<password value="xxxxxxxxx" />
+					<register value="true" />
+					<smtpport value="587" />
+					<ssl value="ssl" />
+					<ack value="false" />
+					<smtp_auth value="true" />
+					<defaultFrom>
+						<email value="user@gmail.com" />
+						<name value="Base&amp;Coreg Platform LOCAL" />
+					</defaultFrom>
+				</transport>
+			</mail>
+		</resources>
+	</development>
+
+	<production extends="application">
+		<export_folder value="/var/www/tracking/public/statexport/" />
+		<phpsettings>
+			<display_startup_errors value="0" />
+			<display_errors value="0" />
+		</phpsettings>
+		<frontController>
+				<params>
+					<displayExceptions value="0" />
+				</params>
+		</frontController>
+		<session>
+			<remember_me_seconds value="0" />
+			<gc_divisor value="1000" />
+			<gc_maxlifetime value="600" />
+			<gc_probability value="1" />
+		</session>
+		<resources>
+			<db>
+				<baseandco>
+					<adapter value="PDO_MYSQL" />
+					<config>
+						<host value="localhost" />
+						<port value="3306" />
+						<username value="root" />
+						<password value="34redft5A" />
+						<dbname value="baseandco" />
+						<default value="false" />
+					</config>
+				</baseandco>
+				<coregistration>
+					<adapter value="PDO_MYSQL" />
+					<config>
+						<host value="localhost" />
+						<port value="3306" />
+						<username value="root" />
+						<password value="34redft5A" />
+						<dbname value="coregistration" />
+						<default value="true" />
+					</config>
+				</coregistration>
+			</db>
+			<mail>
+				<transport>
+					<type value="smtp" />
+					<host value="smtp.baseandco.com" />
+					<auth value="login" />
+					<username value="coreg@baseandco.com" />
+					<password value="coreg123" />
+					<register value="true" />
+					<defaultFrom>
+						<email value="noreply@baseandco.com" />
+						<name value="Base&amp;Coreg Platform" />
+					</defaultFrom>
+				</transport>
+			</mail>
+		</resources>
+	</production>
+</config>

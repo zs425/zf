@@ -1,0 +1,184 @@
+<script type="text/javascript" src="/js/jquery.json-2.2.min.js"></script>
+<script type="text/javascript" src="/js/ui.spinner.min.js"></script>
+<style type="text/css"> @IMPORT url("/css/jquery/ui.spinner.css");</style>
+<style type="text/css">
+    #fieldset-campaignFieldsForm input[type=text]{
+        width: 30px;
+        text-align: center;
+    }
+    #field-name{
+        width: 140px !important;
+        text-align: left !important;
+    }
+    #frmField{
+        background-color: #fff;
+        border: 1px solid #999;
+        width: 300px;
+        padding: 5px;
+        border-radius: 5px;
+    }
+    #addfield{
+        position: absolute;
+        top: -10px;
+        right: 0;
+    }
+    #fieldset-campaignFieldsForm{
+        margin-top: 20px;
+    }
+</style>
+<script>
+	function testFtp() {
+		var w = window.open("<?= utf8_encode($this->ftpTestUrl) ?>", "Test FTP", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=250");
+		w.focus();
+	}
+</script>
+<h1><?= $this->pageTitle; ?></h1>
+<?php if (isset($this->message)):?>
+<section class="<?=(isset($this->hasError) ? 'flashMessageValid':'flashMessageError')?>">
+	<?= $this->message; ?>
+</section>
+<?php endif;?>
+<a href="<?= $this->link('campaign', 'list', 'admin'); ?>">&lt; Retour</a>&nbsp;&nbsp;&nbsp;
+<a href="<?= $this->link('campaign', 'send-mail', 'admin', array('c' => $this->campaign_id)); ?>">Envoyer un mail</a>
+<?php
+
+$date = new Zend_Date();
+
+$startDate = $this->form->campaignForm->start_date->getValue();
+
+if($startDate != ""){
+	$startDate = $date->set($startDate, 'yyyy-mm-dd')->toString('dd/mm/yyyy');
+	$this->form->campaignForm->start_date->setValue($startDate);
+}else{
+	$this->form->campaignForm->start_date->setValue("");
+}
+
+$endDate = $this->form->campaignForm->end_date->getValue();
+
+if($endDate != ""){
+	$endDate = $date->set($endDate, 'yyyy-mm-dd')->toString('dd/mm/yyyy');
+	$this->form->campaignForm->end_date->setValue($endDate);
+}else{
+	$this->form->campaignForm->end_date->setValue("");
+}
+
+?>
+<?= $this->form; ?>
+<form id="frmAdvertiser" enctype="application/x-www-form-urlencoded" action="" method="post">
+	<p>
+		<label for="name">Nom :</label>
+		<input type="text" id="advertiser-name" name="advertiser-name" value="">
+	</p>
+	<p>
+		<label for="website">Site web :</label>
+		<input type="text" id="advertiser-website" name="advertiser-website" value="">
+	</p>
+	<p>
+		<input type="button" id="btnadvertiser" value="Ajouter" style="margin-left: 153px" onclick="submitAdvertiser();">
+	</p>
+</form>
+<form id="frmField" enctype="application/x-www-form-urlencoded" action="" method="post" style="position:absolute; top: 20px; right: 20px">
+	<p>
+		<label for="field-name">Nom :</label>
+		<input type="text" id="field-name" name="field-name" value="">
+	</p>
+	<p>
+		<input type="button" id="btnfield" value="Ajouter" style="margin-left: 153px" onclick="submitField();">
+	</p>
+</form>
+<script type="text/javascript">
+var url = 'http://tracking.collecting.<?php echo (APPLICATION_ENV == 'development') ? 'local' : 'fr'; ?>';
+submitAdvertiser = function() {
+	var $loadingAdvertiserIndicator = $('<img />')
+		.attr({
+			'src' : '/images/spinner.gif',
+			'id' : 'loadingAdvertiserSpinner',
+			'alt' : 'En cours'
+		})
+		.addClass('loadingWait')
+		.insertAfter($('#btnadvertiser'));
+		$.post(url.concat('<?= $this->link('async', 'addadvertiser', 'admin'); ?>'), {status: 1, name: $('#advertiser-name').val(), website: $('#advertiser-website').val()}, function(response) {
+		var $obj = $.evalJSON(response);
+		if ($obj['code'] == 'OK') {
+			$loadingAdvertiserIndicator.remove();
+			$('#campaignAdvertiserForm-advertiser_id').append('<option label="' + $('#advertiser-name').val() + '" value="' + $obj['id'] + '">' + $('#advertiser-name').val() + '</option>');
+
+		} else if (obj['code'] == 'ERROR') {
+		}
+		$('#frmAdvertiser').slideUp(1000, function() {
+			$('#frmAdvertiser #name').val('');
+			$('#frmAdvertiser #website').val('');
+		});
+		$('#addAdvertiser').text('Ajouter');
+	});
+	return false;
+}
+
+submitField = function() {
+	var $loadingFieldIndicator = $('<img />')
+		.attr({
+			'src' : '/images/spinner.gif',
+			'id' : 'loadingFieldSpinner',
+			'alt' : 'En cours'
+		})
+		.addClass('loadingWait')
+		.insertAfter($('#btnfield'));
+	$.post(url.concat('<?= $this->link('async', 'addfield', 'admin'); ?>'), {name: $('#field-name').val() }, function(response) {
+		var $obj = $.evalJSON(response);
+		if ($obj['code'] == 'OK') {
+			$loadingFieldIndicator.remove();
+			$('#fieldset-campaignFieldsForm').append('<p><input type="hidden" value="0" name="campaignFieldsForm[' + $obj['alias'] + ']"><input type="text" value="1" id="campaignFieldsForm-' + $obj['alias'] + '" name="campaignFieldsForm[' + $obj['alias'] + ']"><label class="labelleft optional" for="campaignFieldsForm-' + $obj['alias'] + '">' + $obj['name'] + '</label></p>');
+
+		} else if (obj['code'] == 'ERROR') {
+		}
+		$('#frmField').slideUp(1000, function() {
+			$('#field-name').val('');
+			$('#addfield').text('Ajouter un champ');
+		});
+	});
+	return false;
+}
+
+$(document).ready(function() {
+	$('#addAdvertiser').click(function() {
+		var $link = $(this);
+		if ($link.text() == 'Ajouter') {
+			$link.text('Annuler');
+		} else {
+			$link.text('Ajouter');
+		}
+		$("#frmAdvertiser").slideToggle('1000', function() {});
+		return false;
+	});
+
+	$('#frmAdvertiser').insertAfter($('#fieldset-campaignForm').parent());
+	$('#frmAdvertiser').hide();
+
+	$('#frmField').prependTo($('#fieldset-campaignFieldsForm'));
+	$('#frmField').hide();
+
+	$('<i>Remplir la case avec la position dans le tableau d\'export (1, 2, 3, etc...), laisser vide si le critère ne doit pas être récupéré.</i><br><span style="color:red">C\'est interdit à utiliser le tiret "-" dans le nom du champ !</span>')
+        .prependTo($('#fieldset-campaignFieldsForm'));
+
+	var $addField = $('<a>')
+	.attr({
+		'title' : 'Ajouter un champ à la liste existante',
+		'id' : 'addfield',
+		'href' : '<?= $this->link('async', 'addfield', 'admin'); ?>'
+	})
+	.text('Ajouter un champ')
+	.addClass('absolutelink')
+	.prependTo($('#fieldset-campaignFieldsForm'))
+	.click(function() {
+		var $link = $(this);
+		if ($link.text() == 'Ajouter un champ') {
+			$link.text('Annuler');
+		} else {
+			$link.text('Ajouter un champ');
+		}
+		$("#frmField").slideToggle('1000', function() {});
+		return false;
+	});
+
+});
+</script>

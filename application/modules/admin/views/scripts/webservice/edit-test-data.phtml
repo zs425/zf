@@ -1,0 +1,21 @@
+<h1><?= $this->pageTitle; ?></h1>
+<nav style="background-color: #f3f3f3; padding: 10px; margin-bottom: 15px; position: relative;">
+	<a href="<?= $this->link('webservice', 'list', 'admin'); ?>">&lt; Retour</a>
+</nav>
+<?= $this->form; ?>
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="450" scope="col" align="left">Données de test</th>
+		<th width="450" scope="col">&nbsp;</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->testData as $data): ?>
+		<tr>
+			<td align="left"><?= $data->data; ?></td>
+			<td align="right"><a href="<?= $this->link('webservice', 'edit-test-data', 'admin', array('id' => $data->id, 'a' => 'delete')); ?>" title="Voir">Supprimer</a></td>
+		</tr>
+		<?php endforeach;?>
+	</tbody>
+</table>

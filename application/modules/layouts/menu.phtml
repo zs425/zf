@@ -1,0 +1,22 @@
+<ul>
+<?php
+foreach ($this->container as $page) {
+	echo '<li><a href="' . $page->getHref() . '" title="' . $page->getTitle() . '"';
+	$isActive = $page->isActive(false);
+	if ($isActive) {
+		echo ' class="active"';
+	}
+	echo '>' . $page->getLabel() . '</a></li>' . PHP_EOL;
+	if (!empty($page->pages)) {
+		foreach ($page->pages as $subpage) {
+			$isSubpageActive = $subpage->isActive(true);
+			echo '<li><a href="' . $subpage->getHref() . '" title="' . $subpage->getTitle() . '"';
+			if ($isSubpageActive) {
+				echo ' class="active"';
+			}
+			echo '>' . $subpage->getLabel() . '</a></li>' . PHP_EOL;
+		}
+	}
+}
+?>
+</ul>

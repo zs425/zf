@@ -1,0 +1,27 @@
+<?php
+    $url = $this->link(null, null, 'admin') . (isset($this->cid)?"?cid={$this->cid}":'');
+?>
+<section style="background-color: #f3f3f3; padding: 10px; margin-bottom: 10px; position: relative;" id="period">
+    <form  action="<?=$url?>">
+        <span>Période d'analyse : du 
+            <?= $this->datePicker('prev_period', $this->startDate, array('dateFormat' => 'dd/mm/yy')); ?> au <?= $this->datePicker('next_period', $this->endDate, array('dateFormat' => 'dd/mm/yy')); ?>
+        </span>
+        <input type="submit" id="filter_date" name="filter_date" value="OK" onclick="filter"/>
+        <input type="hidden" name="type_coreg" value="<?=$this->typeCoreg ?>"/>
+        <a href="<?=$url?>">Reset</a>
+        &nbsp;&nbsp;&nbsp;
+        <?php if($this->totalTurnover != -1){ ?>
+        <strong>CA total : <?php echo $this->totalTurnover; ?> &euro;</strong>
+        <?php if(isset($this->cid)):?>
+            <input type="hidden" name="cid" value="<?=$this->cid?>"/>
+        <?php endif;?>
+        <? } ?>
+        <?php 
+            if ($this->filter == true) {
+                echo "<a href=\"" . $this->link('statistic', 'list', 'admin') . "\" style=\"position:absolute; right: 10px\">Voir les campagnes actives</a>";
+            } else {
+                echo "<a href=\"" . $this->link('statistic', 'list', 'admin', array('filter' => 'archived')) . "\" style=\"position:absolute; right: 10px\">Voir les campagnes archiv&eacute;es</a>";
+            }
+        ?>  
+    </form>
+</section>

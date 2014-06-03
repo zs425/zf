@@ -1,0 +1,32 @@
+<center>
+<table cellpadding="0" cellspacing="2" width="600" border="0" style="border:2px solid #cccccc; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:18px;">
+    <tr>
+        <td>
+            <img src="http://tracking.collecting.fr/images/bandeau.jpg" border="0" alt="" />
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <br />Bonjour <?= $this->clientName ?>,
+            <br /><br />Vous trouverez en pièce jointe le fichier de Co registration concernant la campagne « <?= $this->campaignName ?> ».
+            <br /><br />
+            Volume collecté entre le <?= $this->yesterdayDate ?> (<?= $this->sendTime ?>h) et le <?= $this->endDate ?> (<?= $this->sendTime ?>h) : <?= $this->sinceLastActionLeads ?> leads<br />
+            Volume collecté entre le  <?= $this->currentMonth ?> et <?= $this->todayDate ?> (<?= $this->sendTime ?>h) : <?= $this->currentMonthLeads ?> leads<br />
+            Budget campagne <?= date("M Y") ?> : <?= $this->budgetCurrentMonth ?> €*<br />
+            <span style="font-size: 9px">*Budget calculé sur le nombre de lead brut livré à date</span><br /><br />
+            Bien cordialement,<br />
+            <i><?= $this->pmName ?></i><br />
+            <?= $this->pmEmail ?><br /><br />
+            <a href="http://www.baseandco.com/">www.baseandco.com</a><br />
+            <?php if($this->pmPhone == ""): ?>
+            Tél : 01&nbsp;58&nbsp;36&nbsp;03&nbsp;67
+            <?php else: ?>
+            Tel : <?= $this->pmPhone ?>
+            <?php endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#e91b86" align="center" height="40"><a href="http://www.baseandco.com/" style="color:#ffffff; text-decoration:underline">www.baseandco.com</a></td>
+    </tr>
+</table>
+</center>

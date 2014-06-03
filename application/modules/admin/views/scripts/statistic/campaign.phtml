@@ -1,0 +1,81 @@
+<?php $startDate = new Zend_Date(); ?>
+<?php $endDate = new Zend_Date(); ?>
+<style>
+<!--
+input[type=text] {
+	border: 1px solid #ccc;
+	width: 78px;
+	text-align: center;
+}
+#period a:link {
+	margin: 0 3px;
+}
+#period a:link img {
+	vertical-align: middle;
+}
+-->
+</style>
+<script type="text/javascript">
+<!--
+filter = function() {
+
+};
+//-->
+</script>
+<h1><?= $this->pageTitle; ?></h1>
+<?=$this->partial('statistic/period_statistics.phtml', $this);?>
+
+<div class="campaign_type">
+	<?php
+		if($this->typeCoreg == "1")
+			$style1 = "text-decoration:underline; font-weight:bold;";
+
+		if($this->typeCoreg == "0")
+			$style2 = "text-decoration:underline; font-weight:bold;";
+
+	?>
+	Type de campagne : <a href="<?= $this->link('statistic', 'list', 'admin', array('type_coreg' => '1',
+																				'prev_period' => $this->startDate,
+																				'next_period' => $this->endDate)); ?>" style="<?= $style1 ?>">Coreg</a>
+	&nbsp;&nbsp;
+	<a href="<?= $this->link('statistic', 'list', 'admin', array('type_coreg' => '0',
+																				'prev_period' => $this->startDate,
+																				'next_period' => $this->endDate)); ?>" style="<?= $style2 ?>">Email</a>
+</div>
+
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="200" scope="col">Campagne</th>
+	  	<th width="90" scope="col">Début</th>
+	  	<th width="90" scope="col">Fin</th>
+	  	<th width="90" scope="col">Leads</th>
+	  	<th width="90" scope="col">Prix</th>
+	  	<th width="85" scope="col">CA</th>
+	  	<th width="85" scope="col">Volume</th>
+	  	<th width="70" scope="col">Evolution</th>
+	  	<th width="52" scope="col">Ext.</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->stats as $stat):?>
+		<?php $startDate->set($stat['start_date'], 'YYYY-MM-DD', 'fr_FR'); ?>
+		<?php $endDate->set($stat['end_date'], 'YYYY-MM-DD', 'fr_FR'); ?>
+		<tr>
+			<td><a href="<?= $this->link('statistic', 'list', 'admin', array('cid' => $stat['id'],
+																				'prev_period' => $this->startDate,
+																				'next_period' => $this->endDate)); ?>" title="Voir les éditeurs"><?= $stat['name']; ?></a></td>
+			<td><?= $startDate->toString('dd/MM/y'); ?></td>
+			<td><?= ($stat['end_date'] == "0000-00-00") ? "Non définie" : $endDate->toString('dd/MM/y'); ?></td>
+			<td><?= number_format($stat['leads'], 0, '', ' ');; ?></td>
+			<td><?= number_format($stat['rate'], 2, '.', ''); ?>€</td>
+			<td><?= number_format($stat['leads']*$stat['rate'], 0, '', ' '); ?>€</td>
+			<td><?= number_format($stat['volume'], 0, '', ' '); ?></td>
+			<td><?= @ceil((int)$stat['leads'] / (int)$stat['volume'] * 100); ?>%</td>
+			<td><a href="<?= $this->link('statistic', 'export', 'admin', array('cid' => $stat['id'],
+																				'prev_period' => $this->searchStartDateSweFormat,
+																				'next_period' => $this->searchEndDateSweFormat)); ?>">CSV</a></td>
+		</tr>
+		<?php endforeach; ?>
+	</tbody>
+</table>

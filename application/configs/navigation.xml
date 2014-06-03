@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<nav>
+		<home>
+			<label>Accueil</label>
+			<module>admin</module>
+			<controller>index</controller>
+			<action>list</action>
+			<title>Accueil de la coregistration</title>
+			<route>default</route>
+			<pages>
+				<statistics>
+					<label>Statistiques</label>
+					<module>admin</module>
+					<controller>statistic</controller>
+					<action>index</action>
+					<class></class>
+					<title>Voir les statistiques</title>
+					<route>default</route>
+					<pages>
+						<list>
+							<label>Lister</label>
+							<module>admin</module>
+							<controller>statistic</controller>
+							<action>list</action>
+							<title>Lister les statistiques</title>
+						</list>
+						<!-- <campaign>
+							<label>Campagnes</label>
+							<module>admin</module>
+							<controller>statistic</controller>
+							<action>campaign</action>
+							<title>Stats des campagnes</title>
+						</campaign>
+						<publisher>
+							<label>Editeurs</label>
+							<module>admin</module>
+							<controller>statistic</controller>
+							<action>publisher</action>
+							<title>Stats des éditeurs</title>
+						</publisher> -->
+					</pages>
+				</statistics>
+				<campaigns>
+					<label>Campagnes</label>
+					<module>admin</module>
+					<controller>campaign</controller>
+					<action>index</action>
+					<class></class>
+					<title>Les campagnes</title>
+					<route>default</route>
+					<pages>
+						<list>
+							<label>Lister</label>
+							<module>admin</module>
+							<controller>campaign</controller>
+							<action>list</action>
+							<title>Lister les campagnes</title>
+							<route>default</route>
+						</list>
+						<view>
+							<label>Voir</label>
+							<module>admin</module>
+							<controller>campaign</controller>
+							<action>view</action>
+							<title>Voir une campagne</title>
+							<route>default</route>
+						</view>
+						<edit>
+							<label>Editer</label>
+							<module>admin</module>
+							<controller>campaign</controller>
+							<action>edit</action>
+							<title>Editer une campagne</title>
+							<route>default</route>
+						</edit>
+					</pages>
+				</campaigns>
+				<publishers>
+					<label>Editeurs</label>
+					<uri>http://baseandco.com/intranet/ListeEditeurs/</uri>
+					<title>Les éditeurs</title>
+					<!-- <route>default</route>
+					<pages>
+						<list>
+							<label>Lister</label>
+							<module>admin</module>
+							<controller>publisher</controller>
+							<action>list</action>
+							<title>Lister les éditeurs</title>
+							<route>default</route>
+						</list>
+						<edit>
+							<label>Editer</label>
+							<module>admin</module>
+							<controller>publisher</controller>
+							<action>edit</action>
+							<title>Editer un éditeur</title>
+							<route>default</route>
+						</edit>
+					</pages> -->
+				</publishers>
+				<webservices>
+					<label>Webservices</label>
+					<module>admin</module>
+					<controller>webservice</controller>
+					<action>index</action>
+					<class></class>
+					<title>Les webservices</title>
+					<route>default</route>
+					<pages>
+						<list>
+							<label>Lister</label>
+							<module>admin</module>
+							<controller>webservice</controller>
+							<action>list</action>
+							<title>Lister les webservices</title>
+							<route>default</route>
+						</list>
+						<view>
+							<label>Voir</label>
+							<module>admin</module>
+							<controller>webservice</controller>
+							<action>view</action>
+							<title>Voir un webservice</title>
+							<route>default</route>
+						</view>
+						<edit>
+							<label>Editer</label>
+							<module>admin</module>
+							<controller>webservice</controller>
+							<action>edit</action>
+							<title>Editer un webservice</title>
+							<route>default</route>
+						</edit>
+						<new>
+							<label>Créer</label>
+							<module>admin</module>
+							<controller>webservice</controller>
+							<action>new</action>
+							<title>Créer un webservice</title>
+							<route>default</route>
+						</new>
+						<edit-test-data>
+							<label>Gérer les données de test</label>
+							<module>admin</module>
+							<controller>webservice</controller>
+							<action>edit-test-data</action>
+							<title>Gérer les données de test</title>
+							<route>default</route>
+						</edit-test-data>
+					</pages>
+				</webservices>
+				<setup>
+					<label>Paramétrages</label>
+					<module>admin</module>
+					<controller>setup</controller>
+					<action>index</action>
+					<class></class>
+					<title>Paramétrage de l'admin</title>
+					<route>default</route>
+					<pages>
+						<users>
+							<label>Utilisateurs</label>
+							<module>admin</module>
+							<controller>setup</controller>
+							<action>user</action>
+							<class></class>
+							<title>Utilisateurs</title>
+							<route>default</route>
+						</users>
+					</pages>
+				</setup>
+			</pages>
+		</home>
+	</nav>
+</config>

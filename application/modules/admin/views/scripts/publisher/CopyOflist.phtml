@@ -1,0 +1,79 @@
+<?php $creationDate = new Zend_Date(); ?>
+<style>
+<!--
+thead tr {
+	background-image: -webkit-gradient(
+		linear,
+		left bottom,
+		left top,
+		color-stop(0, rgb(255,124,192)),
+		color-stop(1, rgb(238,50,145))
+	);
+	background-image: -moz-linear-gradient(
+		center bottom,
+		rgb(255,124,192) 0%,
+		rgb(238,50,145) 100%
+	);
+	color: #FFF;
+	height: 40px;
+}
+tbody tr {
+	height: 30px;
+}
+-->
+</style>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$('#flashMessage').delay(2000).fadeOut(2000);
+})
+//-->
+</script>
+<h1><?= $this->pageTitle; ?></h1>
+<nav style="background-color: #f3f3f3; padding: 10px; margin-bottom: 15px; position: relative;">
+	<a href="<?= $this->link('publisher', 'edit', 'admin'); ?>">Créer un &eacute;diteur</a>
+	<?php 
+		if ($this->filter == true) {
+			echo "<a href=\"" . $this->link('publisher', 'list', 'admin') . "\" style=\"position:absolute; right: 10px\">Voir les &eacute;diteurs actifs</a>";
+		} else {
+			echo "<a href=\"" . $this->link('publisher', 'list', 'admin', array('filter' => 'archived')) . "\" style=\"position:absolute; right: 10px\">Voir les &eacute;diteurs archiv&eacute;s</a>";
+		}
+	?>
+	
+</nav>
+<?php if (isset($this->message)):?>
+<section id="flashMessage" style="background-color: #65eca1; height: 40px; margin-bottom: 15px; line-height: 40px; padding-left: 20px; color: #2c6646;">
+	<?= $this->message; ?>
+</section>
+<?php endif;?>
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="60" scope="col">ID</th>
+	  	<th width="120" scope="col">Editeur</th>
+	  	<th width="80" scope="col">Campagnes</th>
+	  	<th width="100" scope="col">Créé le</th>
+	  	<th width="120" scope="col">Catégorie</th>
+	  	<th width="80" scope="col">Contact</th>
+	  	<th width="120" scope="col">Actions</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->publishers as $publisher): ?>
+		<?php $creationDate->set($publisher->creation_date, 'YYYY-MM-DD', 'fr_FR'); ?>
+			<tr>
+				<td><?= $publisher->id; ?></td>
+				<td><?= $publisher->name; ?></td>
+				<td><?= count($publisher->findTable_CampaignPublisher()); ?></td>
+				<td><?= $creationDate->toString('dd/MM/y'); ?></td>
+				<td><?= $publisher->findParentTable_Category()->name; ?></td>
+				<td><a href="mailto:<?= $publisher->findParentTable_Contact()->email; ?>" title="Ecrire au contact">Ecrire</a></td>
+				<td>
+					<a href="<?= $this->link('publisher', 'view', 'admin', array('p' => $publisher->id)); ?>" title="Voir"><img src="/images/view_16.png" width="16" height="16" /></a>
+					<a href="<?= $this->link('publisher', 'edit', 'admin', array('p' => $publisher->id)); ?>" title="Modifier"><img src="/images/edit_16.png" width="16" height="16" /></a>
+					<a href="<?= $this->link('publisher', 'archive', 'admin', array('p' => $publisher->id)); ?>" title="Archiver"><img src="/images/<?php if ($publisher->status == 1) { echo 'archive';} else { echo 'activate';} ?>_16.png" width="16" height="16" /></a>
+				</td>
+			</tr>
+		<?php endforeach;?>
+	</tbody>
+</table>

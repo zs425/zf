@@ -1,0 +1,89 @@
+<?php $startDate = new Zend_Date(); ?>
+<?php $endDate = new Zend_Date(); ?>
+<?php $creationDate = new Zend_Date(); ?>
+<script type="text/javascript" src="/js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.14.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.json-2.2.min.js"></script>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$('.flashMessageValid').delay(2000).fadeOut(2000);
+})
+//-->
+</script>
+<h1><?= $this->pageTitle; ?></h1>
+<?php if (isset($this->message)):?>
+<section class="<?=(strpos($this->message, "Impossible")===0 ? 'flashMessageError':'flashMessageValid')?>">
+	<?= $this->message; ?>
+</section>
+<?php endif;?>
+<nav style="background-color: #f3f3f3; padding: 10px; margin-bottom: 15px; position: relative;">
+	<a href="<?= $this->link('campaign', 'edit', 'admin'); ?>">Créer une campagne</a>
+	<?php 
+		if ($this->filter == true) {
+			echo "<a href=\"" . $this->link('campaign', 'list', 'admin') . "\" style=\"position:absolute; right: 10px\">Voir les campagnes actives</a>";
+		} else {
+			echo "<a href=\"" . $this->link('campaign', 'list', 'admin', array('filter' => 'archived')) . "\" style=\"position:absolute; right: 10px\">Voir les campagnes archiv&eacute;es</a>";
+		}
+	?>
+</nav>
+
+<div class="campaign_type">
+	<a href="<?=$this->url(array('sortBy'=>$this->sortBy=='name' ? 'id':'name', 'c'=>isset($this->campaign)?$this->campaign->id:null))?>">Trier par <?=($this->sortBy=='name' ? 'Id':'Nom')?></a>
+</div>
+
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="60" scope="col">ID</th>
+	  	<th width="200" scope="col">Campagne</th>
+	  	<th width="60" scope="col">Editeurs</th>
+	  	<th width="40" scope="col">Tarif</th>
+	  	<th width="90" scope="col">Début</th>
+	  	<th width="90" scope="col">Fin</th>
+	  	<th width="120" scope="col">Responsable</th>
+	  	<th width="90" scope="col">Créée le</th>
+		<th width="50" scope="col">Type</th>
+	  	<th width="100" scope="col">Actions</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->campaigns as $campaign): ?>
+		<?php $startDate->set($campaign->start_date, 'YYYY-MM-DD', 'fr_FR'); ?>
+		<?php $endDate->set($campaign->end_date, 'YYYY-MM-DD', 'fr_FR'); ?>
+		<?php $creationDate->set($campaign->creation_date, 'YYYY-MM-DD', 'fr_FR'); ?>
+		<tr>
+			<td><?= $campaign->id; ?></td>
+			<td><?= $campaign->name; ?></td>
+			<td><?= count($campaign->findTable_CampaignPublisher()); ?></td>
+			<td><?= round($campaign->findParentTable_CampaignAdvertiser()->rate, 2); ?>€</td>
+			<td><?= $startDate->toString('dd/MM/y'); ?></td>
+			<td><?= ($campaign->end_date == "0000-00-00") ? "Non définie" : $endDate->toString('dd/MM/y'); ?></td>
+			<td><?= $campaign->findParentTable_User()->firstname . ' ' . $campaign->findParentTable_User()->lastname; ?></td>
+			<td><?= $creationDate->toString('dd/MM/y'); ?></td>
+			<td>
+				<?php
+				if($campaign->type_coreg == "1")
+					echo "Coreg";
+				else
+					echo "Email";
+				?>
+			</td>
+			<td>
+				<a href="<?= $this->link('campaign', 'view', 'admin', array('c' => $campaign->id)); ?>" title="Voir"><img src="/images/magnifier.png" width="16" height="16" /></a>
+				<a href="<?= $this->link('campaign', 'edit', 'admin', array('c' => $campaign->id)); ?>" title="Modifier"><img src="/images/pencil.png" width="16" height="16" /></a>
+<!--			<a href="<?= $this->link('campaign', 'archive', 'admin', array('c' => $campaign->id)); ?>" title="Archiver"><img src="/images/<?php if ($campaign->status == 1) { echo 'archive';} else { echo 'activate';} ?>_16.png" width="16" height="16" /></a>-->
+			<?php if($campaign->status == 1) { ?>	
+				<a href="<?= $this->link('campaign', 'archive', 'admin', array('c' => $campaign->id)); ?>" title="<? echo 'Archiver'; ?>">
+					<img src="/images/package_delete.png" width="16" height="16" />
+				</a>
+			<?php }else{ ?>
+				<a href="<?= $this->link('campaign', 'active', 'admin', array('c' => $campaign->id)); ?>" title="<? echo 'Activer'; ?>">
+					<img src="/images/package_add.png" width="16" height="16" />
+				</a>
+			<?php } ?>
+			</td>
+		</tr>
+		<?php endforeach;?>
+	</tbody>
+</table>

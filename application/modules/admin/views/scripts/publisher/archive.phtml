@@ -1,0 +1,5 @@
+<p>Etes-vous certain de vouloir archiver l'éditeur <?= $this->publisher->name; ?> ?</p>
+<br />
+<input type="button" value="Archiver" onclick="location.replace('/admin/publisher/archive?p=<?= $this->publisher->id ?>&confirm=do')" />
+<input type="button" value="Annuler" onclick="location.replace('/admin/publisher/list')" />
+<!--<a href="" style="margin-right: 20px;">Oui</a>&nbsp;<a href="">Non</a>-->

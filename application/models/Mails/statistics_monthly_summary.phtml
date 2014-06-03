@@ -1,0 +1,39 @@
+<center>
+<table cellpadding="0" cellspacing="2" width="600" border="0" style="border:2px solid #cccccc; font-family:Verdana, Geneva, sans-serif; font-size:12px; line-height:18px;">
+    <tr>
+        <td>
+            <img src="http://tracking.collecting.fr/images/bandeau.jpg" border="0" alt="" />
+        </td>
+    </tr>
+    <tr>
+        <td align="left">
+            <span style="font-size: 14px;font-weight: bold; color: #e91b86;">Reporting campagne <?= $this->campaignName ?> du mois de <?= $this->lastMonth ?> </span>
+            <br /><br />Bonjour <?= $this->clientName ?>,
+            <br />Vous trouverez ci-après un reporting de votre collecte sur le mois <?= $this->lastMonth ?>.
+            <br /><br />
+            Nombre de leads collectés en <?= $this->lastMonth ?>* : <?= $this->leadsLastMonth ?> leads<br>
+            CA réalisé en <?= $this->lastMonth ?>* : <?= $this->budgetLastMonth ?> €<br>
+            <span style="font-size: 9px;">*Chiffres bruts avant facturation</span>
+            <br /><br />
+            <table width="600" border="0">
+                <tr>
+                    <td colspan="2">
+                        <img src="http://tracking.collecting.fr/<?= $this->graphDaily ?>">
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src="http://tracking.collecting.fr/<?= $this->graphMonthly ?>"></td>
+                    <td><img src="http://tracking.collecting.fr/<?= $this->graphGender ?>"></td>
+                </tr>
+                <tr>
+                    <td><img src="http://tracking.collecting.fr/<?= $this->graphAnnual ?>"></td>
+                    <td><img src="http://tracking.collecting.fr/<?= $this->graphTopDomains ?>"></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#e91b86" align="center" height="40"><a href="http://www.baseandco.com/" style="color:#ffffff; text-decoration:underline">www.baseandco.com</a></td>
+    </tr>
+</table>
+</center>

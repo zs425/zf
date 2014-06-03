@@ -1,0 +1,50 @@
+<?php echo $this->doctype("HTML5"), PHP_EOL; ?>
+<html>
+<head>
+<base href="http://<?php echo $_SERVER['SERVER_NAME'] . $this->baseUrl(); ?>/" />
+<?php echo $this->headMeta()
+      ->setHttpEquiv('Content-Type', 'text/html; charset=utf-8')
+      ->setHttpEquiv('Content-Style-Type', 'text/css')
+      ->setHttpEquiv('lang', 'fr')
+      ->setHttpEquiv('imagetoolbar', 'no')
+      ->setName('author', 'Julien Guittard - Codeandview')
+      ->setName('generator', 'Eclipse')
+      ->setName('language', 'fr');
+      echo PHP_EOL. $this->headLink(array('rel'  => 'favicon',
+                                 'type' => 'image/x-icon',
+                                 'href' => '/favicon.ico'))
+      						->prependStylesheet('/css/screen.css')
+							->appendStylesheet('/css/jquery/jquery-ui-1.8.14.custom.css');
+      echo PHP_EOL . $this->headTitle($this->pageTitle . ' | Base&CoReg');
+	  echo PHP_EOL . $this->headScript();
+
+?>
+<?= $this->jQuery()->setVersion('1.5.1')->setUiVersion('1.8.14'); ?>
+</head>
+<body>
+	<div class="container">
+		<nav>
+			<?= $this->navigation()->menu()->setPartial(array('menu.phtml', 'default'))->render(); ?>
+		</nav>
+		<header>
+			<a href="/"><img src="images/bc_logo_990x130.png" alt="Baseandco - Coregistration" width="990" height="130" id="logo" /></a>
+		</header>
+		<nav id="subnav">
+			<div class="breadcrumbs">
+				<?= $this->navigation()->breadcrumbs(); ?>
+			</div>
+			<div style="float:right">
+				<?= $this->action('signin', 'login', 'admin'); ?>
+			</div>
+			<br class="clearfloat" />
+		</nav>
+		<section class="content">
+			<?php echo $this->layout()->content; ?>
+		</section>
+		<footer>
+		    <p>&copy; Base&amp;Co 2005-2013 - Tous droits r&eacute;serv&eacute;s - Mentions légales<?php if (Zend_Auth::getInstance()->hasIdentity() && Zend_Auth::getInstance()->getIdentity()->role_alias == 'admin') echo " - <a href='" . $this->link('setup', 'user', 'admin') . "'  style='color: #fff;'>Paramètres</a>"; ?></p>
+		</footer>
+	</div>
+	<nav></nav>
+</body>
+</html>

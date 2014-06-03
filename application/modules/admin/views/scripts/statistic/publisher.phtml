@@ -1,0 +1,81 @@
+<style>
+<!--
+input[type=text] {
+	border: 1px solid #ccc;
+	width: 78px;
+	text-align: center;
+}
+#period a:link {
+	margin: 0 3px;
+}
+#period a:link img {
+	vertical-align: middle;
+}
+-->
+</style>
+<script type="text/javascript" src="/js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.14.custom.min.js"></script>
+<script type="text/javascript" src="/js/tables.js"></script>
+<h1><?= $this->pageTitle; ?></h1>
+<a href="<?= $this->link('statistic', 'list', 'admin', array('cid' => $stat['id'],
+																				'prev_period' => $this->startDate,
+																				'next_period' => $this->endDate)); ?>">&lt; Retour</a>
+<section style="background-color: #f3f3f3; padding: 10px; margin: 15px 0; position: relative;" id="period">
+	<span>Campagne <?= $this->campaign; ?></span>
+</section>
+<?=$this->partial('statistic/period.phtml', $this);?>
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="200" scope="col">Editeur</th>
+	  	<th width="70" scope="col">Leads</th>
+	  	<th width="70" scope="col">Tarif</th>
+	  	<th width="70" scope="col">CA</th>
+	  	<th width="70" scope="col">Volume</th>
+	  	<th width="50" scope="col">Evol.</th>
+	  	<th width="50" scope="col">Ext.</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php $totLeads = 0; $totVolume = 0; $totCa=0; foreach ($this->stats as $stat): $stat['volume']=$stat['volume_publisher'];?>
+		<tr>
+			<td><?= $stat['name_publisher']?></td>
+			<td><?= number_format($stat['leads'], 0, '', ' ');; ?></td>
+			<td><?= $stat['price']; ?>€</td>
+			<td><?= number_format($stat['leads']*$stat['price'], 0, '', ' '); ?>€</td>
+			<td><?= number_format($stat['volume'], 0, '', ' '); ?></td>
+			<td><?= ceil((int)$stat['leads'] / (int)$stat['volume'] * 100); ?>%</td>
+			<!--<td><a href="<?= $this->link('statistic', 'export', 'admin', array('cid' => $stat['campaign_id'], 'pid'=>$stat['publisher_id'])); ?>">CSV</a></td>-->
+			<td><a href="<?= $this->link('statistic', 'export', 'admin', array('cid' => $stat['campaign_id'],
+																			    'pid'=>$stat['publisher_id'],
+																				'prev_period' => $this->searchStartDateSweFormat,
+																				'next_period' => $this->searchEndDateSweFormat)); ?>">CSV</a></td>
+
+		</tr>
+		<?php
+        $totLeads+= $stat['leads'];
+        $totVolume+= $stat['volume'];
+        $totCa+= $stat['leads']*$stat['price'];
+        endforeach; ?>
+	</tbody>
+    <tfoot>
+        <tr>
+            <th><!--Editeur--></th>
+            <th><?=$totLeads?></th>
+            <th><!--Tarif Ed.--></th>
+            <th><?=number_format($totCa, 0, '', ' ')?>€</th>
+            <th><?=$totVolume?></th>
+            <?php if($totVolume > 0) { ?>
+			<th><?=ceil($totLeads/$totVolume*100)?>%</th>
+            <?php }else{ ?>
+			<th>0%</th>
+			<?php } ?>
+			<th><!--Ext.--></th>
+        </tr>
+    </tfoot>
+</table>
+<br>
+
+<?php if($this->collectGraph != "") { ?>
+<img src="<?= $this->collectGraph; ?>">
+<?php } ?>

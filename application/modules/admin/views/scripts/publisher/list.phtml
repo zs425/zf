@@ -1,0 +1,57 @@
+<script type="text/javascript" src="/js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.14.custom.min.js"></script>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$('tbody tr:odd', this).removeClass('even').addClass('odd');
+	$('tbody tr:even', this).removeClass('odd').addClass('even');
+})
+//-->
+</script>
+<h1><?= $this->pageTitle; ?></h1>
+<nav style="background-color: #f3f3f3; padding: 10px; margin-bottom: 15px; position: relative;">
+	<a href="http://baseandco.com/intranet/ListeEditeurs/ajouter.php" target="_blank">Créer un &eacute;diteur</a>
+	<?php 
+		if ($this->filter == true) {
+			echo "<a href=\"" . $this->link('publisher', 'list', 'admin') . "\" style=\"position:absolute; right: 10px\">Voir les &eacute;diteurs actifs</a>";
+		} else {
+			echo "<a href=\"" . $this->link('publisher', 'list', 'admin', array('filter' => 'archived')) . "\" style=\"position:absolute; right: 10px\">Voir les &eacute;diteurs archiv&eacute;s</a>";
+		}
+	?>
+	
+</nav>
+<?php if (isset($this->message)):?>
+<section id="flashMessage" style="background-color: #65eca1; height: 40px; margin-bottom: 15px; line-height: 40px; padding-left: 20px; color: #2c6646;">
+	<?= $this->message; ?>
+</section>
+<?php endif;?>
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="60" scope="col">ID</th>
+	  	<th width="120" scope="col">Editeur</th>
+	  	<th width="80" scope="col">Campagnes</th>
+	  	<th width="100" scope="col">Créé le</th>
+	  	<th width="120" scope="col">Catégorie</th>
+	  	<th width="80" scope="col">Contact</th>
+	  	<th width="120" scope="col">Actions</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->publishers as $publisher): ?>
+			<tr>
+				<td><?= $publisher['ID']; ?></td>
+				<td><?= $publisher['Nom_Base']; ?></td>
+				<td>?</td>
+				<td>00-00-0000</td>
+				<td><?= $publisher['Categorie']; ?></td>
+				<td><a href="mailto:<?= $publisher['Email']; ?>" title="Ecrire au contact">Ecrire</a></td>
+				<td>
+					<a href="http://baseandco.com/intranet/ListeEditeurs/fiche.php?id=<?= $publisher['ID']; ?>" title="Voir" target="_blank"><img src="/images/view_16.png" width="16" height="16" /></a>
+					<a href="http://baseandco.com/intranet/ListeEditeurs/modifier.php?id=<?= $publisher['ID']; ?>" title="Modifier" target="_blank"><img src="/images/edit_16.png" width="16" height="16" /></a>
+				</td>
+			</tr>
+		<?php endforeach;?>
+	</tbody>
+</table>
+<?php echo $this->publishers; ?>

@@ -1,0 +1,51 @@
+<style>
+<!--
+form fieldset {
+	border: 1px solid #ccc;
+	margin: 10px 0;
+	width: 450px;
+}
+form label {
+	display: inline-block;
+	width: 145px;
+	padding-right: 5px;
+	text-align: right;
+}
+form label.ta {
+	vertical-align: top;
+}
+form label.labelleft {
+	text-align: left;
+}
+form select {
+	border: 1px solid #ccc;
+	width: 188px;
+}
+input[type=text], input[type=email], input[type=url] {
+	border: 1px solid #ccc;
+	width: 184px;
+}
+input[type=checkbox] {
+	margin-left: 30px;
+}
+form p {
+	margin: 5px 0;
+}
+textarea {
+	width: 250px;
+	height: 80px;
+	border: 1px solid #ccc;
+}
+ul.errors {
+	margin-left: 115px;
+}
+ul.errors li {
+	color: #c00;
+	font-style: italic;
+	font-size: 10px;
+}
+-->
+</style>
+<h1><?= $this->pageTitle; ?></h1>
+<a href="<?= $this->link('publisher', 'list', 'admin'); ?>">&lt; Retour</a>
+<?= $this->form; ?>

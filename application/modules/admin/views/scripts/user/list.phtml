@@ -1,0 +1,60 @@
+<?php $registrationDate = new Zend_Date(); ?>
+<script type="text/javascript" src="/js/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.8.14.custom.min.js"></script>
+<script type="text/javascript" src="/js/jquery.json-2.2.min.js"></script>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$('.flashMessageValid').delay(2000).fadeOut(2000);
+})
+//-->
+</script>
+<h1><?= $this->pageTitle; ?></h1>
+<?php if (isset($this->message)):?>
+<section class="<?=(isset($this->hasError) ? 'flashMessageValid':'flashMessageError')?>">
+	<?= $this->message; ?>
+</section>
+<?php endif;?>
+<nav style="background-color: #f3f3f3; padding: 10px; margin-bottom: 15px; position: relative;">
+	<a href="<?= $this->link('user', 'edit', 'admin'); ?>">Créer un utilisateur</a>
+	<?php 
+		if ($this->filter == true) {
+			echo "<a href=\"" . $this->link('user', 'list', 'admin') . "\" style=\"position:absolute; right: 10px\">Voir les utilisateurs actifs</a>";
+		} else {
+			echo "<a href=\"" . $this->link('user', 'list', 'admin', array('filter' => 'archived')) . "\" style=\"position:absolute; right: 10px\">Voir les utilisateurs archiv&eacute;s</a>";
+		}
+	?>
+</nav>
+<table border="0" cellpadding="5" cellspacing="0" class="sortable">
+	<thead>
+	  <tr>
+	  	<th width="60" scope="col">ID</th>
+	  	<th width="100" scope="col">Prénom</th>
+	  	<th width="100" scope="col">Nom</th>
+	  	<th width="200" scope="col">Email</th>
+	  	<th width="80" scope="col">Téléphone</th>
+	  	<th width="100" scope="col">Rôle</th>
+	  	<th width="90" scope="col">Créé le</th>
+	  	<th width="100" scope="col">Actions</th>
+	  </tr>
+	</thead>
+	<tbody>
+		<?php foreach ($this->users as $user): ?>
+		<?php $registrationDate->set($user->registration_date, 'YYYY-MM-DD', 'fr_FR'); ?>
+		<tr>
+			<td><?= $user->id; ?></td>
+			<td><?= $user->firstname; ?></td>
+			<td><?= $user->lastname; ?></td>
+			<td><?= $user->email; ?></td>
+			<td><?= $user->phone; ?></td>
+			<td><?= $user->findParentTable_Role()->name; ?></td>
+			<td><?= $registrationDate->toString('dd/MM/y'); ?></td>
+			<td>
+				<a href="<?= $this->link('user', 'view', 'admin', array('u' => $user->id)); ?>" title="Voir"><img src="/images/magnifier.png" width="16" height="16" /></a>
+				<a href="<?= $this->link('user', 'edit', 'admin', array('u' => $user->id)); ?>" title="Modifier"><img src="/images/pencil.png" width="16" height="16" /></a>
+				<a href="<?= $this->link('user', 'archive', 'admin', array('u' => $user->id)); ?>" title="<?= ($user->status == 1) ? 'Archiver' : 'Activer';  ?>"><img src="/images/package_<?= ($user->status == 1) ? 'add' : 'delete'; ?>.png" width="16" height="16" /></a>
+			</td>
+		</tr>
+		<?php endforeach;?>
+	</tbody>
+</table>
